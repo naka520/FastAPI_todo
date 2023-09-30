@@ -22,6 +22,13 @@ def index(request: Request):
     )
 
 def admin(request: Request):
+    # ユーザとタスクを取得
+    # とりあえず今はadminユーザのみ取得
+    user = db.session.query(User).filter(User.username == 'admin').first()
+    task = db.session.query(Task).filter(Task.user_id == user.id).all()
+    db.session.close()
+ 
     return templates.TemplateResponse('admin.html',
                                       {'request': request,
-                                       'username': 'admin'})
+                                       'user': user,
+                                       'task': task})
